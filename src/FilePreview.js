@@ -6,7 +6,6 @@ let ImagePreview = ({selectedFile}) => {
 }
 
 const TextPreview = ({selectedFile, props}) => {
-  let text = '';
   if(selectedFile){
     fetch(selectedFile)
     .then(function(r){
@@ -22,16 +21,8 @@ const TextPreview = ({selectedFile, props}) => {
 export default class FilePreview extends Component {
   render() {
     let url = this.props.selectedFile;
-    let type = '';
-    let ext = '';
-    if(url){
-      ext = url.split('.')[1];
-      if(ext === 'png'){
-        type = 'Image';
-      } else if(ext === 'txt'){
-        type = 'Text';
-      }
-    }
+    let type = this.props.getFileType(url);
+
     return (
       <div className="file-preview">
         <div>FilePreview</div>

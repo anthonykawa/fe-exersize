@@ -55,6 +55,20 @@ export default class App extends Component {
     })
   }
 
+  getFileType = (url) => {
+    let type = null;
+    let ext = null;
+    if(url){
+      ext = url.split('.')[1];
+      if(ext === 'png'){
+        type = 'Image';
+      } else if(ext === 'txt'){
+        type = 'Text';
+      }
+    }
+    return type;
+  }
+
   render() {
     return (
       <div className="App">
@@ -66,13 +80,15 @@ export default class App extends Component {
           <div className="col col__left">
             <TreeView
               files={this.state.files}
-              select={this.updateFileURL} />
+              select={this.updateFileURL}
+              getFileType={this.getFileType} />
           </div>
           <div className="col col__left">
             <FilePreview 
             selectedFile={this.state.selectedFile}
             updateText={this.updateText}
-            text={this.state.text} />
+            text={this.state.text}
+            getFileType={this.getFileType} />
           </div>
         </div>
       </div>

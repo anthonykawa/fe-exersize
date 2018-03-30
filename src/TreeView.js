@@ -4,14 +4,24 @@ import './TreeView.css';
 
 
 export default class TreeView extends Component {
-  render() {
+
+  componentWillMount(){
     if(this.props.files){
+      this.props.files.map(res => {
+        console.log(res);
+      })
     }
+  }
+
+  render() {
     return (
       <div>
         <div>TreeView</div>
+        <div>files/</div>
           {this.props.files !== null ?
             this.props.files.map((file, id) => {
+              let dirs = file.file.split('/');
+              
               return (
                 <div key={id} style={{display:'block'}}>
                   |---------
