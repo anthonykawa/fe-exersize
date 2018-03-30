@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import FilePreview from './FilePreview';
 import TreeView from './TreeView';
 import UserInfo from './UserInfo';
-import axios from 'axios';
 
 import './App.css';
 
@@ -15,6 +14,8 @@ export default class App extends Component {
       user: null,
       files: null,
       selectedFile: null,
+      text: null,
+      filename: null,
     };
   }
 
@@ -41,6 +42,12 @@ export default class App extends Component {
     });
   }
 
+  updateText = (text) => {
+    this.setState({
+      text
+    })
+  }
+
   updateFileURL = (event, selectedFileID) => {
     let selectedFile = this.state.files[selectedFileID].file;
     this.setState({
@@ -62,7 +69,10 @@ export default class App extends Component {
               select={this.updateFileURL} />
           </div>
           <div className="col col__left">
-            <FilePreview selectedFile={this.state.selectedFile} />
+            <FilePreview 
+            selectedFile={this.state.selectedFile}
+            updateText={this.updateText}
+            text={this.state.text} />
           </div>
         </div>
       </div>

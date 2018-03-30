@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
-import fs from 'fs';
 import './FilePreview.css';
 
 let ImagePreview = ({selectedFile}) => {
   return <img className="img-preview" src={selectedFile} />;
 }
 
-const TextPreview = ({selectedFile}) => {
-  return <div></div>;
+const TextPreview = ({selectedFile, props}) => {
+  let text = '';
+  if(selectedFile){
+    fetch(selectedFile)
+    .then(function(r){
+      return r.text();
+    })
+    .then(function(body){
+      props.updateText(body);
+    })
+  }
+  return <div>{props.text ? props.text : ''}</div>;
 }
 
 export default class FilePreview extends Component {
@@ -32,7 +41,7 @@ export default class FilePreview extends Component {
           ?
             <ImagePreview selectedFile={url} />
           :
-            <TextPreview selectedFile={url} />
+            <TextPreview selectedFile={url} props={this.props}/>
         }
       </div>
     );

@@ -5,9 +5,8 @@ import './TreeView.css';
 
 export default class TreeView extends Component {
   render() {
-    let root = null;
     if(this.props.files){
-  }
+    }
     return (
       <div>
         <div>TreeView</div>
