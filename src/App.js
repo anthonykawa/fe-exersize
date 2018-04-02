@@ -14,20 +14,22 @@ export default class App extends Component {
       user: null,
       files: null,
       selectedFile: null,
+      selectedFileID: null,
       text: null,
-      filename: null,
     };
   }
 
   componentWillMount(){
     fetch('http://localhost:3000/api/user.json')
     .then(res =>  res.json())
-    .then((result) => {
-      this.updateUser(result);
-    })
+    .then((result) =>
+      this.updateUser(result)
+    )
     fetch('http://localhost:3000/api/files.json')
     .then(res => res.json())
-    .then((result) => this.updateFiles(result))
+    .then((result) =>
+     this.updateFiles(result)
+   )
   }
 
   updateUser = (user) => {
@@ -48,21 +50,20 @@ export default class App extends Component {
     })
   }
 
-  updateFileURL = (event, selectedFileID) => {
-    let selectedFile = this.state.files[selectedFileID].file;
+  updateSelectedFile = (event, selectedFileID) => {
+    let selectedFile = this.state.files[selectedFileID];
     this.setState({
-      selectedFile
+      selectedFile,
+      selectedFileID,
     })
   }
 
-  getFileType = (url) => {
+  getFileType = (file) => {
     let type = null;
-    let ext = null;
-    if(url){
-      ext = url.split('.')[1];
-      if(ext === 'png'){
+    if(file){
+      if(file.type === 'image/png'){
         type = 'Image';
-      } else if(ext === 'txt'){
+      } else if(file.type === 'text/plain'){
         type = 'Text';
       }
     }
@@ -80,15 +81,16 @@ export default class App extends Component {
           <div className="col col__left">
             <TreeView
               files={this.state.files}
-              select={this.updateFileURL}
+              select={this.updateSelectedFile}
+              fileID={this.state.selectedFileID}
               getFileType={this.getFileType} />
           </div>
           <div className="col col__left">
-            <FilePreview 
-            selectedFile={this.state.selectedFile}
-            updateText={this.updateText}
-            text={this.state.text}
-            getFileType={this.getFileType} />
+            <FilePreview
+              selectedFile={this.state.selectedFile}
+              updateText={this.updateText}
+              text={this.state.text}
+              getFileType={this.getFileType} />
           </div>
         </div>
       </div>
