@@ -7,8 +7,8 @@ export default class UserInfo extends Component {
     return (
       <div>
         <div>UserInfo</div>
-        <div>Name: { this.props.user !== null ? this.props.user.user : '' }</div>
-        <div>Email: { this.props.user !== null ? this.props.user.email : '' }</div>
+        <div style={{display: 'inline-block', marginRight: '10px'}}>Name: { this.props.user !== null ? this.props.user.user : '' }</div>
+        <div style={{display: 'inline-block', marginLeft: '10px'}}>Email: { this.props.user !== null ? this.props.user.email : '' }</div>
       </div>
     );
   }

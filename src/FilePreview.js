@@ -1,16 +1,37 @@
 import React, { Component } from 'react';
 import './FilePreview.css';
 
+const urlStyle = {
+  width: '65%',
+  display: 'inline-block',
+  borderBottom: '1px solid black'
+}
+
+const typeStyle = {
+  width: '12%',
+  display: 'inline-block',
+  borderBottom: '1px solid black'
+}
+
+const displayInfoStyle = {
+  marginBottom: '20px'
+}
+
 const validate = (file) => {
   let output;
   fetch(file.file)
   .then(r => {
-    console.log(r.body);
     if(r){
       output = r;
     }
   })
   return output;
+}
+
+const DisplayInfo = ({file, type}) => {
+  return(
+    <div style={displayInfoStyle}>url: <div style={urlStyle}>{file.file}</div> type: <div style={typeStyle}>{type}</div></div>
+  )
 }
 
 const ImagePreview = ({selectedFile}) => {
@@ -42,7 +63,7 @@ export default class FilePreview extends Component {
     return (
       <div className="file-preview">
         <div>FilePreview</div>
-        <p>url: {file.file} type: {type}</p>
+        <DisplayInfo file={file} type={type} />
         {
           type === 'Image'
           ?

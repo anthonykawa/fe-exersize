@@ -1,9 +1,13 @@
-.select {
-  background-color: yellow;
+div.select, div.select a {
+  color: red !important;
+  text-decoration: none !important;
 }
 .subdir {
-  margin-left: 30px;
+  margin-left: 15px;
 }
 .rootdir {
-  margin-left: 10px;
+  margin-left: 15px;
+}
+.filename {
+  margin-left: 15px;
 }
