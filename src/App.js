@@ -14,22 +14,53 @@ export default class App extends Component {
       user: null,
       files: null,
       selectedFile: null,
+      isValid: null,
       selectedFileID: null,
       text: null,
     };
   }
 
+  componentDidMount(){
+      let newFiles = []; 
+      if(this.state.files){
+        this.state.files.map(file => {
+          let output = new Object();
+          let url = file.file;
+          let valid;
+          fetch(url).then(response => {
+            var contentType = response.headers.get('content-type');
+            if(contentType && contentType.includes("text/html")){
+              valid = false;
+            } else {
+              valid = true;
+            }
+            output = {
+              user: file.user,
+              file: file.file,
+              fileName: file.fileName,
+              type: file.type,
+              isActive: valid,
+            }
+            return output;
+          })
+          .then(response => {
+            newFiles.push(response);
+          })
+          this.updateFiles(newFiles);  
+        })
+      }
+      console.log(this.state.files)
+  }
+
   componentWillMount(){
-    fetch('http://localhost:3000/api/user.json')
+    let getUser = fetch('http://localhost:3000/api/user.json')
     .then(res =>  res.json())
-    .then((result) =>
-      this.updateUser(result)
-    )
-    fetch('http://localhost:3000/api/files.json')
+    let getFiles = fetch('http://localhost:3000/api/files.json')
     .then(res => res.json())
-    .then((result) =>
-     this.updateFiles(result)
-   )
+    Promise.all([getUser, getFiles]).then(r => {
+      this.updateUser(r[0]);
+      this.updateFiles(r[1]);
+    })
   }
 
   updateUser = (user) => {
@@ -54,7 +85,13 @@ export default class App extends Component {
     let selectedFile = this.state.files[selectedFileID];
     this.setState({
       selectedFile,
-      selectedFileID,
+      selectedFileID
+    })
+  }
+
+  updateIsValid = (isValid) => {
+    this.setState({
+      isValid
     })
   }
 
@@ -87,6 +124,8 @@ export default class App extends Component {
           </div>
           <div className="col col__left">
             <FilePreview
+              isValid={this.state.isValid}
+              updateIsValid={this.updateIsValid}
               selectedFile={this.state.selectedFile}
               updateText={this.updateText}
               text={this.state.text}

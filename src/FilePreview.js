@@ -18,14 +18,19 @@ const displayInfoStyle = {
 }
 
 const validate = (file) => {
-  let output;
-  fetch(file.file)
-  .then(r => {
-    if(r){
-      output = r;
-    }
-  })
-  return output;
+  let url = file.file;
+  let isValid;
+    fetch(url).then(response => {
+        var contentType = response.headers.get('content-type');
+        if(contentType && contentType.includes("text/html")){
+          throw new TypeError("Opps, we haven't got the correct file")
+        } else {
+          isValid = true;
+        }
+    }).catch(e => {
+      isValid = false;
+    })
+  return isValid;
 }
 
 const DisplayInfo = ({file, type}) => {
@@ -34,9 +39,12 @@ const DisplayInfo = ({file, type}) => {
   )
 }
 
-const ImagePreview = ({selectedFile}) => {
-  validate(selectedFile);
-  return <img alt="File not found" className="img-preview" src={selectedFile.file} />;
+const ImagePreview = ({selectedFile, props}) => {
+    
+  if(props.isValid){
+    return <img alt="File not found" className="img-preview" src={selectedFile.file} />;
+  }
+  return <p>File Not Found</p>;
 }
 
 const TextPreview = ({selectedFile, props}) => {
@@ -67,7 +75,7 @@ export default class FilePreview extends Component {
         {
           type === 'Image'
           ?
-            <ImagePreview selectedFile={file} />
+            <ImagePreview selectedFile={file} props={this.props} />
           :
             <TextPreview selectedFile={file} props={this.props}/>
         }
