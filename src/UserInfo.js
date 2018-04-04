@@ -1,14 +1,34 @@
 import React, { Component } from 'react';
 import './UserInfo.css';
 
-export default class UserInfo extends Component {
+const userInfoTitleWrapper = {
+  width: '800px',
+}
 
+const userInfoStyle = {
+    display: 'inline-block',
+    margin: '5px 10px',
+    fontSize: '20px',
+}
+
+const userInfoTitle = {
+  fontSize: '25px',
+
+}
+
+const userInfoWrapper = {
+  marginLeft: '10%'
+}
+
+export default class UserInfo extends Component {
   render() {
     return (
-      <div>
-        <div>UserInfo</div>
-        <div style={{display: 'inline-block', marginRight: '10px'}}>Name: { this.props.user !== null ? this.props.user.user : '' }</div>
-        <div style={{display: 'inline-block', marginLeft: '10px'}}>Email: { this.props.user !== null ? this.props.user.email : '' }</div>
+      <div style={userInfoTitleWrapper}>
+        <div style={userInfoTitle}>UserInfo</div>
+        <div style={userInfoWrapper}>
+          <div style={userInfoStyle}>Name: { this.props.user !== null ? this.props.user.user : '' }</div>
+          <div style={userInfoStyle}>Email: { this.props.user !== null ? this.props.user.email : '' }</div>
+        </div>
       </div>
     );
   }

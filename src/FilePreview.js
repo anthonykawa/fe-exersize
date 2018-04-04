@@ -14,70 +14,46 @@ const typeStyle = {
 }
 
 const displayInfoStyle = {
-  marginBottom: '20px'
+  marginBottom: '20px',
+  fontSize: '20px'
 }
 
-const validate = (file) => {
-  let url = file.file;
-  let isValid;
-    fetch(url).then(response => {
-        var contentType = response.headers.get('content-type');
-        if(contentType && contentType.includes("text/html")){
-          throw new TypeError("Opps, we haven't got the correct file")
-        } else {
-          isValid = true;
-        }
-    }).catch(e => {
-      isValid = false;
-    })
-  return isValid;
+const DisplayInfo = ({ file, type }) => {
+  if(file){
+    return (
+      <div style={displayInfoStyle}>url: <div style={urlStyle}>{file.file}</div> type: <div style={typeStyle}>{type}</div></div>
+    )
+  } else {
+    return null;
+  }
 }
 
-const DisplayInfo = ({file, type}) => {
-  return(
-    <div style={displayInfoStyle}>url: <div style={urlStyle}>{file.file}</div> type: <div style={typeStyle}>{type}</div></div>
-  )
-}
-
-const ImagePreview = ({selectedFile, props}) => {
-    
-  if(props.isValid){
-    return <img alt="File not found" className="img-preview" src={selectedFile.file} />;
+const ImagePreview = ({ selectedFile }) => {
+  if (selectedFile.isValid) {
+    return <img alt={selectedFile.fileName} className="img-preview" src={selectedFile.file} />;
   }
   return <p>File Not Found</p>;
 }
 
-const TextPreview = ({selectedFile, props}) => {
-  if(selectedFile){
-    fetch(selectedFile.file)
-    .then(function(r){
-      return r.text();
-    })
-    .then(function(body){
-      props.updateText(body);
-    })
+const TextPreview = ({ selectedFile, props }) => {
+  if(props.text){
+    return <div>{props.text}</div>;
   }
-  return <div>{props.text ? props.text : ''}</div>;
+  return <div></div>;
 }
 
 export default class FilePreview extends Component {
   render() {
-    let file = '';
-    let type = '';
-    if(this.props.selectedFile){
-      file = this.props.selectedFile;
-      type = this.props.getFileType(file);
-    }
     return (
       <div className="file-preview">
-        <div>FilePreview</div>
-        <DisplayInfo file={file} type={type} />
+        <div className="section-title">FilePreview</div>
+        <DisplayInfo file={this.props.selectedFile} type={this.props.getFileType(this.props.selectedFile)} />
         {
-          type === 'Image'
-          ?
-            <ImagePreview selectedFile={file} props={this.props} />
-          :
-            <TextPreview selectedFile={file} props={this.props}/>
+          this.props.getFileType(this.props.selectedFile) === 'Image'
+            ?
+            <ImagePreview selectedFile={this.props.selectedFile} props={this.props} />
+            :
+            <TextPreview selectedFile={this.props.selectedFile} props={this.props} />
         }
       </div>
     );
